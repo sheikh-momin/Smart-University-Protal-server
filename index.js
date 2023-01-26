@@ -22,12 +22,26 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run(){
   try{
     const allUserCollection = client.db('smartUniversityPortal').collection('allUsers')
+    const applyOnline = client.db('smartUniversityPortal').collection('applyOnline')
 
-    app.get('/allUsers', async(req, res ) =>{
-      const query ={};
-      const users = await allUserCollection.find(query).toArray()
-      res.send(users)
+    app.post('/allUsers', async(req, res ) =>{
+      const user = req.body;
+      const result = await allUserCollection.insertOne(user);
+      res.send(result);
     })
+    app.get('/allUsers/:email', async(req, res ) =>{
+      const email = req.params.email;
+      const query = { email };
+      const result = await allUserCollection.findOne(query);
+      res.send(result);
+    })
+
+
+    app.post('/applyOnline', async (req, res) => {
+      const user = req.body;
+      const result = await applyOnline.insertOne(user);
+      res.send(result);
+    });
   }
   finally{
   }
@@ -39,6 +53,8 @@ run().catch(console.log)
 app.get('/', async(req, res) =>{
   res.send('Smart University Portal Server is running')
 })
+
+
 
 app.listen(port, () =>{
   console.log(`smart University Portal Running On ${port}`);
