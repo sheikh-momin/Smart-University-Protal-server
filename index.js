@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const { MongoClient, ServerApiVersion } = require('mongodb');
+const jwt = require("jsonwebtoken");
 require('dotenv').config();
 const multer = require("multer");
 
@@ -25,13 +26,27 @@ async function run(){
   try{
     const allUserCollection = client.db('smartUniversityPortal').collection('allUsers')
     const applyOnline = client.db('smartUniversityPortal').collection('applyOnline')
+    const registeredCourseList = client.db('smartUniversityPortal').collection('registeredCourseList')
+    const clearance = client.db('smartUniversityPortal').collection('clearance')
+
+    // User
+    app.get('/jwt', async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const user = await usersCollection.findOne(query);
+      if (user) {
+        const token = jwt.sign({ email }, process.env.ACCESS_TOKEN, { expiresIn: '20d' });
+        return res.send({ accessToken: token });
+      }
+      res.status(403).send({ accessToken: '' });
+    });
 
     app.post('/allUsers', async(req, res ) =>{
       const user = req.body;
       const result = await allUserCollection.insertOne(user);
       res.send(result);
     })
-<<<<<<< HEAD
+
     app.get('/allUsers/:email', async(req, res ) =>{
       const email = req.params.email;
       const query = { email };
@@ -39,16 +54,31 @@ async function run(){
       res.send(result);
     })
 
-
+    
+    // Apply Online
     app.post('/applyOnline', async (req, res) => {
       const user = req.body;
       const result = await applyOnline.insertOne(user);
       res.send(result);
     });
-=======
 
-   
->>>>>>> a65daba013184b92fe308a178a18505a72688b30
+
+    // Registered Course List
+    app.get('/registeredCourseList/:email', async (req, res) => {
+      const email = req.params.email;
+      const query = { email };
+      const result = await registeredCourseList.findOne(query);
+      res.send(result);
+    })
+
+
+    // Clearance
+    app.get('/clearance/:email', async (req, res) => {
+      const email = req.params.email;
+      const query = { email };
+      const result = await clearance.find(query).toArray();
+      res.send(result);
+    })
   }
   finally{
   }
