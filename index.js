@@ -28,6 +28,7 @@ async function run(){
     const applyOnline = client.db('smartUniversityPortal').collection('applyOnline')
     const registeredCourseList = client.db('smartUniversityPortal').collection('registeredCourseList')
     const clearance = client.db('smartUniversityPortal').collection('clearance')
+    const payment = client.db('smartUniversityPortal').collection('payment')
 
     // User
     app.get('/jwt', async (req, res) => {
@@ -64,9 +65,9 @@ async function run(){
 
 
     // Registered Course List
-    app.get('/registeredCourseList/:email', async (req, res) => {
-      const email = req.params.email;
-      const query = { email };
+    app.get('/registeredCourseList/:semester', async (req, res) => {
+      const semester = req.params.semester;
+      const query = { semester };
       const result = await registeredCourseList.findOne(query);
       res.send(result);
     })
@@ -77,6 +78,15 @@ async function run(){
       const email = req.params.email;
       const query = { email };
       const result = await clearance.find(query).toArray();
+      res.send(result);
+    })
+
+
+    // payment
+    app.get('/payment/:email', async (req, res) => {
+      const email = req.params.email;
+      const query = { email };
+      const result = await payment.find(query).toArray();
       res.send(result);
     })
   }
