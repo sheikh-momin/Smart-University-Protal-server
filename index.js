@@ -18,7 +18,6 @@ const client = new MongoClient(uri, {
   useUnifiedTopology: true,
   serverApi: ServerApiVersion.v1,
 });
-
 async function run() {
   try {
     const allUserCollection = client
@@ -27,16 +26,34 @@ async function run() {
     const applyOnline = client
       .db("smartUniversityPortal")
       .collection("applyOnline");
-
-    const StudentDetails = client
+    const registeredCourseList = client
       .db("smartUniversityPortal")
-      .collection("studentDetails");
+      .collection("registeredCourseList");
+    const clearance = client
+      .db("smartUniversityPortal")
+      .collection("clearance");
+    const payment = client.db("smartUniversityPortal").collection("payment");
+
+    // User
+    app.get("/jwt", async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const user = await usersCollection.findOne(query);
+      if (user) {
+        const token = jwt.sign({ email }, process.env.ACCESS_TOKEN, {
+          expiresIn: "20d",
+        });
+        return res.send({ accessToken: token });
+      }
+      res.status(403).send({ accessToken: "" });
+    });
 
     app.post("/allUsers", async (req, res) => {
       const user = req.body;
       const result = await allUserCollection.insertOne(user);
       res.send(result);
     });
+
     app.get("/allUsers/:email", async (req, res) => {
       const email = req.params.email;
       const query = { email };
@@ -44,16 +61,34 @@ async function run() {
       res.send(result);
     });
 
+    // Apply Online
     app.post("/applyOnline", async (req, res) => {
       const user = req.body;
       const result = await applyOnline.insertOne(user);
       res.send(result);
     });
 
-    //student detail
-    app.post("/studentDetails", async (req, res) => {
-      const user = req.body;
-      const result = await StudentDetails.insertOne(user);
+    // Registered Course List
+    app.get("/registeredCourseList/:semester", async (req, res) => {
+      const semester = req.params.semester;
+      const query = { semester };
+      const result = await registeredCourseList.findOne(query);
+      res.send(result);
+    });
+
+    // Clearance
+    app.get("/clearance/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email };
+      const result = await clearance.find(query).toArray();
+      res.send(result);
+    });
+
+    // payment
+    app.get("/payment/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email };
+      const result = await payment.find(query).toArray();
       res.send(result);
     });
   } finally {
