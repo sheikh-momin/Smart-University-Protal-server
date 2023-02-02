@@ -83,10 +83,10 @@ async function run(){
 
 
     // payment
-    app.get('/payment/:email', async (req, res) => {
-      const email = req.params.email;
-      const query = { email };
-      const result = await payment.find(query).toArray();
+    app.get('/payment/:semester', async (req, res) => {
+      const semester = req.params.semester;
+      const query = { semester };
+      const result = await payment.findOne(query);
       res.send(result);
     })
   }
