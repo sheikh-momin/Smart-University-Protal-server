@@ -29,6 +29,7 @@ async function run(){
     const registeredCourseList = client.db('smartUniversityPortal').collection('registeredCourseList')
     const clearance = client.db('smartUniversityPortal').collection('clearance')
     const payment = client.db('smartUniversityPortal').collection('payment')
+    const semesterDrop = client.db('smartUniversityPortal').collection('semesterDrop')
 
     // User
     app.get('/jwt', async (req, res) => {
