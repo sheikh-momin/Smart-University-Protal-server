@@ -64,6 +64,20 @@ async function run(){
       res.send(result);
     });
 
+    // Drop Semester
+    app.post('/drop', async (req, res) => {
+      const user = req.body;
+      const result = await semesterDrop.insertOne(user);
+      res.send(result);
+    })
+
+    app.get('/drop/:email', async (req, res) => {
+      const email = req.params.email;
+      const query = { email };
+      const result = await semesterDrop.find(query).toArray();
+      res.send(result);
+    })
+
 
     // Registered Course List
     app.get('/registeredCourseList/:semester', async (req, res) => {
@@ -91,19 +105,7 @@ async function run(){
       res.send(result);
     })
 
-    // Drop Semester
-    app.post('/drop', async (req, res) => {
-      const user = req.body;
-      const result = await semesterDrop.insertOne(user);
-      res.send(result);
-    })
-
-    app.get('/drop/:email', async (req, res) => {
-      const email = req.params.email;
-      const query = { email };
-      const result = await semesterDrop.find(query).toArray();
-      res.send(result);
-    })
+   
 
     
   }
