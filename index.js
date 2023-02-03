@@ -90,6 +90,20 @@ async function run(){
       const result = await payment.findOne(query);
       res.send(result);
     })
+
+    // Drop Semester
+    app.post('/semesterDrop', async (req, res) => {
+      const user = req.body;
+      const result = await semesterDrop.insertOne(user);
+      res.send(result);
+    })
+
+    app.get('/semesterDrop/:email', async (req, res) => {
+      const email = req.params.email;
+      const query = { email };
+      const result = await clearance.find(query).toArray();
+      res.send(result);
+    })
   }
   finally{
   }
