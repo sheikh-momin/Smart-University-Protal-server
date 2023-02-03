@@ -33,8 +33,11 @@ async function run() {
       .db("smartUniversityPortal")
       .collection("clearance");
     const payment = client.db("smartUniversityPortal").collection("payment");
+    const StudentDetails = client
+      .db("smartUniversityPortal")
+      .collection("studentDetails");
 
-    // User
+    // User;
     app.get("/jwt", async (req, res) => {
       const email = req.query.email;
       const query = { email: email };
@@ -84,11 +87,24 @@ async function run() {
       res.send(result);
     });
 
-    // payment
-    app.get("/payment/:email", async (req, res) => {
-      const email = req.params.email;
-      const query = { email };
-      const result = await payment.find(query).toArray();
+    //student details
+    app.post("/studentDetails", async (req, res) => {
+      const user = req.body;
+      const result = await StudentDetails.insertOne(user);
+      res.send(result);
+    });
+
+    app.get("/studentDetails", async (req, res) => {
+      const query = {};
+      const options = await StudentDetails.find(query).toArray();
+      res.send(options);
+    });
+
+    //payment
+    app.get("/payment/:semester", async (req, res) => {
+      const semester = req.params.semester;
+      const query = { semester };
+      const result = await payment.findOne(query);
       res.send(result);
     });
   } finally {
