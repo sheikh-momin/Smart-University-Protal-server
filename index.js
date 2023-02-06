@@ -117,7 +117,7 @@ async function run() {
     app.get("/drop/:email", async (req, res) => {
       const email = req.params.email;
       const query = { email };
-      const result = await semesterDrop.findOne(query);
+      const result = await semesterDrop.find(query).toArray();
       res.send(result);
     });
   } finally {
