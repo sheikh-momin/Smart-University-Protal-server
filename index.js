@@ -33,9 +33,8 @@ async function run() {
       .db("smartUniversityPortal")
       .collection("clearance");
     const payment = client.db("smartUniversityPortal").collection("payment");
-    const StudentDetails = client
-      .db("smartUniversityPortal")
-      .collection("studentDetails");
+    const StudentDetails = client.db("smartUniversityPortal").collection("studentDetails");
+    const semesterDrop = client.db("smartUniversityPortal").collection("drop");
 
     // User;
     app.get("/jwt", async (req, res) => {
@@ -105,6 +104,20 @@ async function run() {
       const semester = req.params.semester;
       const query = { semester };
       const result = await payment.findOne(query);
+      res.send(result);
+    });
+
+    //semesterDrop
+    app.post("/drop", async (req, res) => {
+      const user = req.body;
+      const result = await semesterDrop.insertOne(user);
+      res.send(result);
+    });
+
+    app.get("/drop/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email };
+      const result = await semesterDrop.findOne(query);
       res.send(result);
     });
   } finally {
