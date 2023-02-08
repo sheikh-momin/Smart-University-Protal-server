@@ -70,6 +70,14 @@ async function run() {
       const result = await applyOnline.insertOne(user);
       res.send(result);
     });
+    // Apply Online
+    app.post("/publish", async (req, res) => {
+      const data = req.body;
+      const result = await liveResult.insertOne(data);
+      res.send(result);
+    });
+    // Live result publish 
+ 
 
     // Registered Course List
     app.get("/registeredCourseList/:semester", async (req, res) => {
@@ -136,6 +144,8 @@ async function run() {
       const result = await semesterDrop.find(query).toArray();
       res.send(result);
     });
+
+    
   } finally {
   }
 }
