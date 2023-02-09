@@ -36,6 +36,7 @@ async function run() {
     const StudentDetails = client.db("smartUniversityPortal").collection("studentDetails");
     const semesterDrop = client.db("smartUniversityPortal").collection("drop");
     const registeredDetails = client.db("smartUniversityPortal").collection("registeredDetails");
+    const liveResult = client.db("smartUniversityPortal").collection("liveResult");
 
     // User;
     app.get("/jwt", async (req, res) => {
@@ -72,13 +73,13 @@ async function run() {
     });
 
     // Live result publish 
-    app.post("/publish", async (req, res) => {
+    app.post("/liveResult", async (req, res) => {
       const data = req.body;
       const result = await liveResult.insertOne(data);
       res.send(result);
     });
 
-    app.get("/publish/:semester", async (req, res) => {
+    app.get("/liveResult/:semester", async (req, res) => {
       const semester = req.params.semester;
       const query = { semester };
       const result = await liveResult.findOne(query);
