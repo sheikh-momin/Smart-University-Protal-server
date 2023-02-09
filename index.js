@@ -36,6 +36,12 @@ async function run() {
     const StudentDetails = client
       .db("smartUniversityPortal")
       .collection("studentDetails");
+    const AlumniDetails = client
+      .db("smartUniversityPortal")
+      .collection("alumniDetails");
+    const TeacherDetails = client
+      .db("smartUniversityPortal")
+      .collection("teacherDetails");
 
     // User;
     app.get("/jwt", async (req, res) => {
@@ -97,6 +103,32 @@ async function run() {
     app.get("/studentDetails", async (req, res) => {
       const query = {};
       const options = await StudentDetails.find(query).toArray();
+      res.send(options);
+    });
+
+    //Teachers details
+    app.post("/teacherDetails", async (req, res) => {
+      const user = req.body;
+      const result = await TeacherDetails.insertOne(user);
+      res.send(result);
+    });
+
+    app.get("/teacherDetails", async (req, res) => {
+      const query = {};
+      const options = await TeacherDetails.find(query).toArray();
+      res.send(options);
+    });
+
+    //alumni details
+    app.post("/alumniDetails", async (req, res) => {
+      const user = req.body;
+      const result = await AlumniDetails.insertOne(user);
+      res.send(result);
+    });
+
+    app.get("/alumniDetails", async (req, res) => {
+      const query = {};
+      const options = await AlumniDetails.find(query).toArray();
       res.send(options);
     });
 
