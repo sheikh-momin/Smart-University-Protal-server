@@ -78,6 +78,13 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/publish/:semester", async (req, res) => {
+      const semester = req.params.semester;
+      const query = { semester };
+      const result = await liveResult.findOne(query);
+      res.send(result);
+    });
+
     
 
     // Registered Course List
