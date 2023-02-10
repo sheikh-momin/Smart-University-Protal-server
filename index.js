@@ -103,6 +103,13 @@ async function run() {
       res.send(result);
     });
 
+    app.delete('/registeredCourseList/:semester', async (req, res) => {
+      const semester = req.params.semester;
+      const query = { semester };
+      const result = await reportedItemsCollection.deleteOne(query);
+      res.send(result);
+    });
+
     // Clearance
     app.get("/clearance/:email", async (req, res) => {
       const email = req.params.email;
