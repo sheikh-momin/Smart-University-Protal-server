@@ -47,6 +47,7 @@ async function run() {
       .collection("employeeDetails");
 
     const semesterDrop = client.db("smartUniversityPortal").collection("drop");
+    const liveResult = client.db("smartUniversityPortal").collection("liveResult");
     const registeredDetails = client
       .db("smartUniversityPortal")
       .collection("registeredDetails");
