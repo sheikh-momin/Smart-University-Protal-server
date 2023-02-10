@@ -107,11 +107,24 @@ async function run() {
       res.send(result);
     });
 
+    app.delete('/registeredCourseList/:semester', async (req, res) => {
+      const semester = req.params.semester;
+      const query = { semester };
+      const result = await reportedItemsCollection.deleteOne(query);
+      res.send(result);
+    });
+
     // Clearance
     app.get("/clearance/:email", async (req, res) => {
       const email = req.params.email;
       const query = { email };
       const result = await clearance.find(query).toArray();
+      res.send(result);
+    });
+
+    app.post("/clearance", async (req, res) => {
+      const user = req.body;
+      const result = await clearance.insertOne(user);
       res.send(result);
     });
 
@@ -191,6 +204,12 @@ async function run() {
     app.post("/drop", async (req, res) => {
       const user = req.body;
       const result = await semesterDrop.insertOne(user);
+      res.send(result);
+    });
+
+    app.get("/drop", async (req, res) => {
+      const query = { };
+      const result = await semesterDrop.find(query).toArray();
       res.send(result);
     });
 
