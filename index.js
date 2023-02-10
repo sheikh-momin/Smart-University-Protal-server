@@ -118,6 +118,12 @@ async function run() {
       res.send(result);
     });
 
+    app.post("/clearance", async (req, res) => {
+      const user = req.body;
+      const result = await clearance.insertOne(user);
+      res.send(result);
+    });
+
     //student details
     app.post("/studentDetails", async (req, res) => {
       const user = req.body;
