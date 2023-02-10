@@ -43,6 +43,11 @@ async function run() {
       .db("smartUniversityPortal")
       .collection("teacherDetails");
 
+    const semesterDrop = client.db("smartUniversityPortal").collection("drop");
+    const registeredDetails = client
+      .db("smartUniversityPortal")
+      .collection("registeredDetails");
+
     // User;
     app.get("/jwt", async (req, res) => {
       const email = req.query.email;
@@ -76,6 +81,13 @@ async function run() {
       const result = await applyOnline.insertOne(user);
       res.send(result);
     });
+    // Apply Online
+    app.post("/publish", async (req, res) => {
+      const data = req.body;
+      const result = await liveResult.insertOne(data);
+      res.send(result);
+    });
+    // Live result publish
 
     // Registered Course List
     app.get("/registeredCourseList/:semester", async (req, res) => {
@@ -103,6 +115,19 @@ async function run() {
     app.get("/studentDetails", async (req, res) => {
       const query = {};
       const options = await StudentDetails.find(query).toArray();
+      res.send(options);
+    });
+    // teacherDashboard Registered Details
+
+    app.post("/registeredDetails", async (req, res) => {
+      const user = req.body;
+      const result = await registeredDetails.insertOne(user);
+      res.send(result);
+    });
+
+    app.get("/registeredDetails", async (req, res) => {
+      const query = {};
+      const options = await registeredDetails.find(query).toArray();
       res.send(options);
     });
 
@@ -137,6 +162,20 @@ async function run() {
       const semester = req.params.semester;
       const query = { semester };
       const result = await payment.findOne(query);
+      res.send(result);
+    });
+
+    //semesterDrop
+    app.post("/drop", async (req, res) => {
+      const user = req.body;
+      const result = await semesterDrop.insertOne(user);
+      res.send(result);
+    });
+
+    app.get("/drop/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email };
+      const result = await semesterDrop.find(query).toArray();
       res.send(result);
     });
   } finally {
