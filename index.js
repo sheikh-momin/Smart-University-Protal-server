@@ -168,6 +168,12 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/drop", async (req, res) => {
+      const query = { };
+      const result = await semesterDrop.find(query).toArray();
+      res.send(result);
+    });
+
     app.get("/drop/:email", async (req, res) => {
       const email = req.params.email;
       const query = { email };
