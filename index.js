@@ -42,6 +42,9 @@ async function run() {
     const TeacherDetails = client
       .db("smartUniversityPortal")
       .collection("teacherDetails");
+    const EmployeeDetails = client
+      .db("smartUniversityPortal")
+      .collection("employeeDetails");
 
     const semesterDrop = client.db("smartUniversityPortal").collection("drop");
     const registeredDetails = client
@@ -81,8 +84,9 @@ async function run() {
       const result = await applyOnline.insertOne(user);
       res.send(result);
     });
-    // Apply Online
-    app.post("/publish", async (req, res) => {
+
+    // Live result publish
+    app.post("/liveResult", async (req, res) => {
       const data = req.body;
       const result = await liveResult.insertOne(data);
       res.send(result);
@@ -94,6 +98,12 @@ async function run() {
       const semester = req.params.semester;
       const query = { semester };
       const result = await registeredCourseList.findOne(query);
+      res.send(result);
+    });
+
+    app.post("/registeredCourseList", async (req, res) => {
+      const data = req.body;
+      const result = await registeredCourseList.insertOne(data);
       res.send(result);
     });
 
@@ -141,6 +151,18 @@ async function run() {
     app.get("/teacherDetails", async (req, res) => {
       const query = {};
       const options = await TeacherDetails.find(query).toArray();
+      res.send(options);
+    });
+    //Employee Details
+    app.post("/employeeDetails", async (req, res) => {
+      const user = req.body;
+      const result = await EmployeeDetails.insertOne(user);
+      res.send(result);
+    });
+
+    app.get("/employeeDetails", async (req, res) => {
+      const query = {};
+      const options = await EmployeeDetails.find(query).toArray();
       res.send(options);
     });
 
