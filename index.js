@@ -36,6 +36,7 @@ async function run() {
     const StudentDetails = client.db("smartUniversityPortal").collection("studentDetails");
     const semesterDrop = client.db("smartUniversityPortal").collection("drop");
     const registeredDetails = client.db("smartUniversityPortal").collection("registeredDetails");
+    const teacherCourse = client.db("smartUniversityPortal").collection("teacherCourse");
 
     // User;
     app.get("/jwt", async (req, res) => {
@@ -119,6 +120,20 @@ async function run() {
     app.get("/registeredDetails", async (req, res) => {
       const query = {};
       const options = await registeredDetails.find(query).toArray();
+      res.send(options);
+    });
+
+    // make teacherCoure from admin 
+
+    app.post("/teacherCourse", async (req, res) => {
+      const user = req.body;
+      const result = await teacherCourse.insertOne(user);
+      res.send(result);
+    });
+
+    app.get("/teacherCourse", async (req, res) => {
+      const query = {};
+      const options = await teacherCourse.find(query).toArray();
       res.send(options);
     });
 
