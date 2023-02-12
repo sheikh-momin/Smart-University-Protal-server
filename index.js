@@ -100,7 +100,7 @@ async function run() {
       res.send(result);
     });
 
-    
+
     // Waiver 
     app.post("/waiver", async (req, res) => {
       const data = req.body;
@@ -193,6 +193,8 @@ async function run() {
       const options = await TeacherDetails.find(query).toArray();
       res.send(options);
     });
+
+    
     //Employee Details
     app.post("/employeeDetails", async (req, res) => {
       const user = req.body;
