@@ -33,10 +33,24 @@ async function run() {
       .db("smartUniversityPortal")
       .collection("clearance");
     const payment = client.db("smartUniversityPortal").collection("payment");
-    const StudentDetails = client.db("smartUniversityPortal").collection("studentDetails");
+    const StudentDetails = client
+      .db("smartUniversityPortal")
+      .collection("studentDetails");
+    const AlumniDetails = client
+      .db("smartUniversityPortal")
+      .collection("alumniDetails");
+    const TeacherDetails = client
+      .db("smartUniversityPortal")
+      .collection("teacherDetails");
+    const EmployeeDetails = client
+      .db("smartUniversityPortal")
+      .collection("employeeDetails");
+
     const semesterDrop = client.db("smartUniversityPortal").collection("drop");
     const registeredDetails = client.db("smartUniversityPortal").collection("registeredDetails");
     const teacherCourse = client.db("smartUniversityPortal").collection("teacherCourse");
+    const liveResult = client.db("smartUniversityPortal").collection("liveResult");
+    
 
     // User;
     app.get("/jwt", async (req, res) => {
@@ -71,14 +85,21 @@ async function run() {
       const result = await applyOnline.insertOne(user);
       res.send(result);
     });
-    // Apply Online
-    app.post("/publish", async (req, res) => {
+
+    // Live result publish
+    app.post("/liveResult", async (req, res) => {
       const data = req.body;
       const result = await liveResult.insertOne(data);
       res.send(result);
     });
-    // Live result publish 
- 
+
+    app.get("/liveResult/:semester", async (req, res) => {
+      const semester = req.params.semester;
+      const query = { semester };
+      const result = await liveResult.findOne(query);
+      res.send(result);
+    });
+    // Live result publish
 
     // Registered Course List
     app.get("/registeredCourseList/:semester", async (req, res) => {
@@ -88,11 +109,30 @@ async function run() {
       res.send(result);
     });
 
+    app.post("/registeredCourseList", async (req, res) => {
+      const data = req.body;
+      const result = await registeredCourseList.insertOne(data);
+      res.send(result);
+    });
+
+    app.delete('/registeredCourseList/:semester', async (req, res) => {
+      const semester = req.params.semester;
+      const query = { semester };
+      const result = await reportedItemsCollection.deleteOne(query);
+      res.send(result);
+    });
+
     // Clearance
     app.get("/clearance/:email", async (req, res) => {
       const email = req.params.email;
       const query = { email };
       const result = await clearance.find(query).toArray();
+      res.send(result);
+    });
+
+    app.post("/clearance", async (req, res) => {
+      const user = req.body;
+      const result = await clearance.insertOne(user);
       res.send(result);
     });
 
@@ -108,8 +148,7 @@ async function run() {
       const options = await StudentDetails.find(query).toArray();
       res.send(options);
     });
-    // teacherDashboard Registered Details 
-
+    // teacherDashboard Registered Details
 
     app.post("/registeredDetails", async (req, res) => {
       const user = req.body;
@@ -137,6 +176,43 @@ async function run() {
       res.send(options);
     });
 
+    //Teachers details
+    app.post("/teacherDetails", async (req, res) => {
+      const user = req.body;
+      const result = await TeacherDetails.insertOne(user);
+      res.send(result);
+    });
+
+    app.get("/teacherDetails", async (req, res) => {
+      const query = {};
+      const options = await TeacherDetails.find(query).toArray();
+      res.send(options);
+    });
+    //Employee Details
+    app.post("/employeeDetails", async (req, res) => {
+      const user = req.body;
+      const result = await EmployeeDetails.insertOne(user);
+      res.send(result);
+    });
+
+    app.get("/employeeDetails", async (req, res) => {
+      const query = {};
+      const options = await EmployeeDetails.find(query).toArray();
+      res.send(options);
+    });
+
+    //alumni details
+    app.post("/alumniDetails", async (req, res) => {
+      const user = req.body;
+      const result = await AlumniDetails.insertOne(user);
+      res.send(result);
+    });
+
+    app.get("/alumniDetails", async (req, res) => {
+      const query = {};
+      const options = await AlumniDetails.find(query).toArray();
+      res.send(options);
+    });
 
     //payment
     app.get("/payment/:semester", async (req, res) => {
@@ -153,14 +229,18 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/drop", async (req, res) => {
+      const query = { };
+      const result = await semesterDrop.find(query).toArray();
+      res.send(result);
+    });
+
     app.get("/drop/:email", async (req, res) => {
       const email = req.params.email;
       const query = { email };
       const result = await semesterDrop.find(query).toArray();
       res.send(result);
     });
-
-    
   } finally {
   }
 }
