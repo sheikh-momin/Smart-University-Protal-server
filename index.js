@@ -45,12 +45,15 @@ async function run() {
     const EmployeeDetails = client
       .db("smartUniversityPortal")
       .collection("employeeDetails");
-
     const semesterDrop = client.db("smartUniversityPortal").collection("drop");
-    const registeredDetails = client.db("smartUniversityPortal").collection("registeredDetails");
+    
     const teacherCourse = client.db("smartUniversityPortal").collection("teacherCourse");
     const liveResult = client.db("smartUniversityPortal").collection("liveResult");
     
+    const waiver = client.db("smartUniversityPortal").collection("waiver");
+    const registeredDetails = client
+      .db("smartUniversityPortal")
+      .collection("registeredDetails");
 
     // User;
     app.get("/jwt", async (req, res) => {
@@ -99,7 +102,26 @@ async function run() {
       const result = await liveResult.findOne(query);
       res.send(result);
     });
-    // Live result publish
+
+
+    // Waiver 
+    app.post("/waiver", async (req, res) => {
+      const data = req.body;
+      const result = await waiver.insertOne(data);
+      res.send(result);
+    });
+
+    app.get("/waiver", async (req, res) => {
+      const query = {  };
+      const result = await waiver.find(query).toArray();
+      res.send(result);
+    });
+    app.get("/waiver/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email };
+      const result = await waiver.findOne(query);
+      res.send(result);
+    });
 
     // Registered Course List
     app.get("/registeredCourseList/:semester", async (req, res) => {
@@ -188,6 +210,8 @@ async function run() {
       const options = await TeacherDetails.find(query).toArray();
       res.send(options);
     });
+
+    
     //Employee Details
     app.post("/employeeDetails", async (req, res) => {
       const user = req.body;
