@@ -46,10 +46,14 @@ async function run() {
       .db("smartUniversityPortal")
       .collection("employeeDetails");
     const semesterDrop = client.db("smartUniversityPortal").collection("drop");
-    
-    const teacherCourse = client.db("smartUniversityPortal").collection("teacherCourse");
-    const liveResult = client.db("smartUniversityPortal").collection("liveResult");
-    
+
+    const teacherCourse = client
+      .db("smartUniversityPortal")
+      .collection("teacherCourse");
+    const liveResult = client
+      .db("smartUniversityPortal")
+      .collection("liveResult");
+
     const waiver = client.db("smartUniversityPortal").collection("waiver");
     const registeredDetails = client
       .db("smartUniversityPortal")
@@ -57,6 +61,9 @@ async function run() {
     const noticeDetails = client
       .db("smartUniversityPortal")
       .collection("notice");
+    const StudentApplication = client
+      .db("smartUniversityPortal")
+      .collection("studentApplication");
 
     // User;
     app.get("/jwt", async (req, res) => {
@@ -106,8 +113,7 @@ async function run() {
       res.send(result);
     });
 
-
-    // Waiver 
+    // Waiver
     app.post("/waiver", async (req, res) => {
       const data = req.body;
       const result = await waiver.insertOne(data);
@@ -115,7 +121,7 @@ async function run() {
     });
 
     app.get("/waiver", async (req, res) => {
-      const query = {  };
+      const query = {};
       const result = await waiver.find(query).toArray();
       res.send(result);
     });
@@ -140,7 +146,7 @@ async function run() {
       res.send(result);
     });
 
-    app.delete('/registeredCourseList/:semester', async (req, res) => {
+    app.delete("/registeredCourseList/:semester", async (req, res) => {
       const semester = req.params.semester;
       const query = { semester };
       const result = await reportedItemsCollection.deleteOne(query);
@@ -187,7 +193,7 @@ async function run() {
       res.send(options);
     });
 
-    // make teacherCoure from admin 
+    // make teacherCoure from admin
 
     app.post("/teacherCourse", async (req, res) => {
       const user = req.body;
@@ -214,7 +220,6 @@ async function run() {
       res.send(options);
     });
 
-    
     //Employee Details
     app.post("/employeeDetails", async (req, res) => {
       const user = req.body;
@@ -241,6 +246,13 @@ async function run() {
       res.send(options);
     });
 
+    //student application
+    app.post("/studentApplication", async (req, res) => {
+      const user = req.body;
+      const result = await StudentApplication.insertOne(user);
+      res.send(result);
+    });
+
     //payment
     app.get("/payment/:semester", async (req, res) => {
       const semester = req.params.semester;
@@ -257,7 +269,7 @@ async function run() {
     });
 
     app.get("/drop", async (req, res) => {
-      const query = { };
+      const query = {};
       const result = await semesterDrop.find(query).toArray();
       res.send(result);
     });
@@ -269,7 +281,7 @@ async function run() {
       res.send(result);
     });
 
-    // Notice 
+    // Notice
     app.post("/notice", async (req, res) => {
       const notice = req.body;
       const result = await noticeDetails.insertOne(notice);
@@ -281,10 +293,6 @@ async function run() {
       const result = await noticeDetails.find(query).toArray();
       res.send(result);
     });
-
-
-
-
   } finally {
   }
 }
