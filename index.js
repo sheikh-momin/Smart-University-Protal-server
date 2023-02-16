@@ -281,7 +281,7 @@ async function run() {
       const result = await noticeDetails.find(query).toArray();
       res.send(result);
     });
-
+// student due 
 
 
 
