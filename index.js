@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require("dotenv").config();
 const multer = require("multer");
 
@@ -173,6 +173,16 @@ async function run() {
       const options = await StudentDetails.find(query).toArray();
       res.send(options);
     });
+
+    app.get('/studentDetails/:id', async(req, res) => {
+      const id=req.params.id;
+            const filter={_id:ObjectId(id)};
+            const result=await StudentDetails.findOne(filter);
+            res.send(result)
+  
+  })
+
+
     // teacherDashboard Registered Details
 
     app.post("/registeredDetails", async (req, res) => {
@@ -213,7 +223,13 @@ async function run() {
       const options = await TeacherDetails.find(query).toArray();
       res.send(options);
     });
-
+    app.get('/teacherDetails/:id', async(req, res) => {
+      const id=req.params.id;
+            const filter={_id:ObjectId(id)};
+            const result=await TeacherDetails.findOne(filter);
+            res.send(result)
+  
+  })
     
     //Employee Details
     app.post("/employeeDetails", async (req, res) => {
