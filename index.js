@@ -188,6 +188,13 @@ async function run() {
   
   })
 
+    app.delete("/studentDetails/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: ObjectId(id) };
+      const result = await StudentDetails.deleteOne(filter);
+      res.send(result);
+    });
+
 
     // teacherDashboard Registered Details
 
@@ -234,8 +241,14 @@ async function run() {
             const filter={_id:ObjectId(id)};
             const result=await TeacherDetails.findOne(filter);
             res.send(result)
-  
   })
+
+    app.delete("/teacherDetails/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: ObjectId(id) };
+      const result = await TeacherDetails.deleteOne(filter);
+      res.send(result);
+    });
     
 
     //Employee Details
@@ -269,6 +282,11 @@ async function run() {
       const user = req.body;
       const result = await StudentApplication.insertOne(user);
       res.send(result);
+    });
+    app.get("/studentApplication", async (req, res) => {
+      const query = {};
+      const options = await StudentApplication.find(query).toArray();
+      res.send(options);
     });
 
     //payment
